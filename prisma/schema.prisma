@@ -30,8 +30,8 @@ model Championship {
 
   created_at DateTime? @default(now())
   update_at  DateTime? @default(now())
-  team       Team      @relation(fields: [team_id], references: [id])
-  team_id    String    @unique
+
+  teams ChampionshipOnTeam[]
 
   @@map("Championships")
 }
@@ -40,14 +40,27 @@ model Team {
   id   String @id @default(uuid())
   name String
 
-  created_at    DateTime?       @default(now())
-  update_at     DateTime?       @default(now())
-  championship  Championship[] // 1 team pode está em varios campeonatos
-  coachingStaff CoachingStaff[]
-  coach         Coach?
-  player        Player[]
+  created_at DateTime? @default(now())
+  update_at  DateTime? @default(now())
+
+  championships ChampionshipOnTeam[]
+  players       Player[]
+  staffs        Staff[]
+
+  coach    Coach?  @relation(fields: [coach_id], references: [id])
+  coach_id String? @unique
 
   @@map("Teams")
+}
+
+model ChampionshipOnTeam {
+  championship    Championship @relation(fields: [championship_id], references: [id])
+  championship_id String
+
+  team    Team   @relation(fields: [team_id], references: [id])
+  team_id String
+
+  @@id([championship_id, team_id])
 }
 
 model Player {
@@ -56,19 +69,19 @@ model Player {
   age         String
   nationality String
 
-  created_at       DateTime?         @default(now())
-  update_at        DateTime?         @default(now())
-  statisticsPlayer StatisticsPlayer?
+  created_at DateTime? @default(now())
+  update_at  DateTime? @default(now())
 
-  team    Team   @relation(fields: [team_id], references: [id])
-  team_id String @unique
+  team    Team?   @relation(fields: [team_id], references: [id])
+  team_id String?
+
+  statisticsPlayer StatisticsPlayer?
 
   @@map("Players")
 }
 
 model StatisticsPlayer {
   id          String @id @default(uuid())
-  namePlayer  String
   yellowCards String
   redCards    String
   games       String
@@ -76,13 +89,14 @@ model StatisticsPlayer {
 
   created_at DateTime? @default(now())
   update_at  DateTime? @default(now())
-  player     Player    @relation(fields: [player_id], references: [id])
-  player_id  String    @unique
+
+  player    Player? @relation(fields: [player_id], references: [id])
+  player_id String? @unique
 
   @@map("StatisticsPlayers")
 }
 
-model CoachingStaff {
+model Staff {
   id          String @id @default(uuid())
   name        String
   age         String
@@ -91,12 +105,11 @@ model CoachingStaff {
 
   created_at DateTime? @default(now())
   update_at  DateTime? @default(now())
-  team       Team      @relation(fields: [team_id], references: [id])
-  team_id    String    @unique
-  coach      Coach     @relation(fields: [coach_id], references: [id])
-  coach_id   String    @unique
 
-  @@map("CoachingStaffs")
+  team    Team   @relation(fields: [team_id], references: [id])
+  team_id String
+
+  @@map("Staffs")
 }
 
 model Coach {
@@ -108,10 +121,8 @@ model Coach {
 
   created_at DateTime? @default(now())
   update_at  DateTime? @default(now())
-  team       Team      @relation(fields: [team_id], references: [id])
-  team_id    String    @unique
 
-  coachingStaff CoachingStaff[]
+  team Team?
 
   @@map("Coachs")
 }
