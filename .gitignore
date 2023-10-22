@@ -1,5 +1,7 @@
 # Dependency directories
 node_modules/
+npm-debug.log
+yarn-error.log
 
 # dotenv environment variable files
 .env
@@ -10,3 +12,15 @@ node_modules/
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
