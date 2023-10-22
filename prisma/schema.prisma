@@ -15,7 +15,7 @@ model User {
   name     String
   email    String
   password String
-  roles    String
+  roles    String[]
 
   created_at DateTime? @default(now())
   update_at  DateTime? @default(now())
