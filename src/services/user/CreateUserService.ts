@@ -38,7 +38,7 @@ class CreateUserService {
         name: true,
         email: true,
         roles: true,
-      }
+      },
     });
 
     return user;
